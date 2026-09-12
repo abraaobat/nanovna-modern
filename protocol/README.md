@@ -14,7 +14,8 @@ Unidade de referência:
 - `STM32F303xC Analog & DSP`;
 - USB CDC runtime: VID `0x0483`, PID `0x5740`, Full Speed 12 Mbit/s;
 - macOS node observado: `/dev/cu.usbmodem4001`;
-- shell prompt: `ch>`.
+- shell prompt: `ch>`;
+- `version` observado: `1.2.44`.
 
 ## Comandos expostos pelo firmware 1.2.44 [x401]
 
@@ -42,9 +43,58 @@ Leitura/telemetria de maior interesse inicial:
 
 Comandos que alteram configuração, calibração, estado persistente ou reinicializam o equipamento não devem ser usados pelo Bridge em modo discovery/read-only sem ação explícita do usuário.
 
-## Próxima validação
+## Primeira fixture real de sweep
 
-1. registrar saída de `version`;
-2. confirmar formato de uma aquisição read-only pequena via `scan` e/ou `scan_bin` com sintaxe verificada no upstream;
-3. definir parser e fixture determinística para `DeviceInfo` e `SweepFrame`;
-4. só depois iniciar o primeiro `bridge/usb-probe`.
+Comando validado no ZN401 de referência:
+
+```text
+scan 140000000 150000000 11 7
+```
+
+O formato textual observado é uma linha por ponto, com cinco campos separados por espaço:
+
+```text
+frequency_hz s11_re s11_im s21_re s21_im
+```
+
+Exemplo real:
+
+```text
+140000000 0.995901824 -0.003665643 0.000011592 0.000010958
+```
+
+No firmware upstream, a sintaxe de `scan` é `scan {start(Hz)} {stop(Hz)} [points] [outmask]`. O `outmask` observado/usado como referência é composto por bits: frequência `1`, S11 `2`, S21 `4`; portanto `7` solicita os três conjuntos. O comando executa o sweep solicitado e pausa o sweep após a aquisição, sem implicar gravação persistente de configuração.
+
+Fixtures adicionadas:
+
+- `protocol/fixtures/zn401-1.2.44-scan-140-150mhz-11.txt` — saída textual normalizada;
+- `protocol/fixtures/zn401-1.2.44-scan-140-150mhz-11.json` — representação estruturada para testes de parser.
+
+Essas fixtures são referência de **protocolo e parsing**, não de precisão metrológica: DUT, terminação dos ports e estado completo de calibração não foram registrados na captura.
+
+## Contrato inicial sugerido para `SweepFrame`
+
+```text
+SweepFrame
+├── deviceId / capability profile
+├── startHz
+├── stopHz
+├── pointCount
+├── calibration metadata
+└── points[]
+    ├── frequencyHz
+    ├── s11.re
+    ├── s11.im
+    ├── s21.re
+    └── s21.im
+```
+
+A derivação de SWR, return loss, magnitude, fase e impedância deve ocorrer em camada superior a partir dos valores complexos, preservando os dados brutos recebidos do instrumento.
+
+## Próximas validações
+
+1. confirmar enumeração DFU/recovery sem gravação;
+2. capturar `scan_bin` para comparar eficiência e framing com `scan` textual;
+3. implementar o primeiro `bridge/usb-probe` contra as fixtures;
+4. transformar `info` + `version` em `DeviceInfo` normalizado;
+5. depois fixar o upstream NanoVNA-D/F303 usado como baseline do firmware.
