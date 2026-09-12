@@ -1,17 +1,19 @@
 {
   "schemaVersion": 1,
   "projectId": "nanovna-modern",
-  "updatedAt": "2026-09-12T14:15:00-04:00",
-  "status": "F0 hardware fingerprint / foundation concluída",
+  "updatedAt": "2026-09-12T15:25:00-04:00",
+  "status": "F0 USB runtime confirmado / DFU pendente",
   "statusClass": "validate",
-  "progress": 12,
+  "progress": 16,
   "roadmap": "F0–F14 • foco atual F0/F1",
-  "current": "Repositório independente criado e documentação-base publicada. Hardware de referência identificado como ZeenKo ZN401 / NanoVNA-H4 HW 4.7_ZK, STM32F303xC, firmware NanoVNA-D 1.2.44 [x401], display 480x320 e microSD funcional. A enumeração USB normal ainda não foi confirmada.",
+  "current": "Repositório e documentação-base concluídos. O ZeenKo ZN401 / NanoVNA-H4 HW 4.7_ZK foi identificado e agora a enumeração USB runtime está confirmada no macOS com cabo compatível: NanoVNA-H4, VID 0x0483, PID 0x5740, USB Full Speed e porta /dev/cu.usbmodem4001.",
   "architecture": "NanoVNA RF/DSP → Modern UI + SD Extensions → USB Protocol → Bridge/Web PWA ou ESP32-S3 SmartLink → Smart Analysis/TinyML/IA externa opcional",
-  "next": "Fechar F0 confirmando USB normal e DFU somente-leitura; em seguida fixar upstream NanoVNA-D e produzir build F303 reproduzível antes de qualquer flash experimental.",
-  "action": "Testar cabo de dados conhecido, registrar ioreg/system_profiler/dev-cu e validar enumeração DFU sem gravação.",
+  "next": "Inventariar o console USB em modo somente leitura e depois confirmar enumeração DFU/recovery sem gravação; em seguida fixar upstream NanoVNA-D e produzir build F303 reproduzível.",
+  "action": "Abrir /dev/cu.usbmodem4001 em modo somente leitura, registrar help/info/version disponíveis e depois validar DFU sem escrever firmware.",
   "subprojects": [
     "Hardware fingerprint F0",
+    "USB runtime CDC ✓",
+    "DFU/recovery pendente",
     "NanoVNA-D F303 baseline",
     "Modern UI 480x320",
     "Modular dashboard + presets",
@@ -25,7 +27,7 @@
   ],
   "activity": {
     "date": "2026-09-12",
-    "type": "project-foundation",
-    "text": "Standalone NanoVNA Modern repository created with master roadmap F0–F14 and architecture split across firmware, bridge/web, SD extensions and optional ESP32-S3 SmartLink."
+    "type": "hardware-validation",
+    "text": "Runtime USB enumeration confirmed on macOS: NanoVNA-H4 VID 0x0483 PID 0x5740 at Full Speed with CDC serial node /dev/cu.usbmodem4001. Cable compatibility was the blocking factor in previous tests."
   }
 }
