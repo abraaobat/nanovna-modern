@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
   "projectId": "nanovna-modern",
-  "updatedAt": "2026-09-12T15:35:00-04:00",
-  "status": "F0 USB CDC + shell confirmados / DFU pendente",
+  "updatedAt": "2026-09-12T16:05:00-04:00",
+  "status": "F0 protocolo USB validado / DFU pendente",
   "statusClass": "validate",
-  "progress": 18,
+  "progress": 22,
   "roadmap": "F0–F14 • foco atual F0/F1",
-  "current": "USB runtime e console interativo foram confirmados no ZeenKo ZN401 / NanoVNA-H4 HW 4.7_ZK. O macOS enumera VID 0x0483 PID 0x5740 em Full Speed e cria /dev/cu.usbmodem4001. O shell `ch>` respondeu a `help` e `info`, identificando NanoVNA-H 4, firmware 1.2.44, p:401, IF:12k, ADC:384k, LCD 480x320, Cortex-M4F e STM32F303xC. O inventário inclui scan/scan_bin, data, frequencies, capture e acesso SD, confirmando a viabilidade do futuro USB Bridge.",
+  "current": "USB runtime, console interativo e primeira aquisição remota foram confirmados no ZeenKo ZN401 / NanoVNA-H4 HW 4.7_ZK. O firmware 1.2.44 respondeu a `version` e ao comando `scan 140000000 150000000 11 7`, retornando 11 pontos com frequência + S11 complexo + S21 complexo. A captura foi preservada como fixture TXT/JSON para o futuro parser do Bridge.",
   "architecture": "NanoVNA RF/DSP → Modern UI + SD Extensions → USB Protocol → Bridge/Web PWA ou ESP32-S3 SmartLink → Smart Analysis/TinyML/IA externa opcional",
-  "next": "Registrar `version`, validar uma aquisição read-only pequena pelo protocolo USB com sintaxe confirmada e depois confirmar DFU/recovery sem gravação; em seguida fixar upstream NanoVNA-D e produzir build F303 reproduzível.",
-  "action": "Executar `version` no shell e, após validar a sintaxe upstream, capturar uma fixture mínima de sweep sem alterar configuração persistente; depois validar enumeração DFU sem escrever firmware.",
+  "next": "Confirmar enumeração DFU/recovery sem gravação; depois capturar `scan_bin`, iniciar `bridge/usb-probe` contra as fixtures e fixar o upstream NanoVNA-D/F303 usado como baseline.",
+  "action": "Entrar em DFU por método documentado do NanoVNA-H4 e executar apenas `dfu-util -l` para confirmar o bootloader STM32 sem escrever firmware.",
   "subprojects": [
     "Hardware fingerprint F0",
     "USB runtime CDC ✓",
     "USB shell + command inventory ✓",
-    "USB measurement protocol fixture",
+    "USB measurement protocol fixture ✓",
     "DFU/recovery pendente",
     "NanoVNA-D F303 baseline",
     "Modern UI 480x320",
@@ -29,7 +29,7 @@
   ],
   "activity": {
     "date": "2026-09-12",
-    "type": "protocol-validation",
-    "text": "Interactive NanoVNA Shell validated over USB CDC. `help` and `info` confirmed firmware 1.2.44 [p:401, IF:12k, ADC:384k, Lcd:480x320], STM32F303xC/Cortex-M4F and a command surface suitable for Bridge work, including scan, scan_bin, data, frequencies, capture and SD access."
+    "type": "protocol-fixture",
+    "text": "Validated live `scan` acquisition over USB CDC on firmware 1.2.44. Command `scan 140000000 150000000 11 7` returned 11 rows in the format frequency_hz, S11 real/imag and S21 real/imag. Raw and structured golden fixtures were added for Bridge parser development."
   }
 }
