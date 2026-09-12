@@ -1,18 +1,20 @@
 {
   "schemaVersion": 1,
   "projectId": "nanovna-modern",
-  "updatedAt": "2026-09-12T15:25:00-04:00",
-  "status": "F0 USB runtime confirmado / DFU pendente",
+  "updatedAt": "2026-09-12T15:35:00-04:00",
+  "status": "F0 USB CDC + shell confirmados / DFU pendente",
   "statusClass": "validate",
-  "progress": 16,
+  "progress": 18,
   "roadmap": "F0–F14 • foco atual F0/F1",
-  "current": "Repositório e documentação-base concluídos. O ZeenKo ZN401 / NanoVNA-H4 HW 4.7_ZK foi identificado e agora a enumeração USB runtime está confirmada no macOS com cabo compatível: NanoVNA-H4, VID 0x0483, PID 0x5740, USB Full Speed e porta /dev/cu.usbmodem4001.",
+  "current": "USB runtime e console interativo foram confirmados no ZeenKo ZN401 / NanoVNA-H4 HW 4.7_ZK. O macOS enumera VID 0x0483 PID 0x5740 em Full Speed e cria /dev/cu.usbmodem4001. O shell `ch>` respondeu a `help` e `info`, identificando NanoVNA-H 4, firmware 1.2.44, p:401, IF:12k, ADC:384k, LCD 480x320, Cortex-M4F e STM32F303xC. O inventário inclui scan/scan_bin, data, frequencies, capture e acesso SD, confirmando a viabilidade do futuro USB Bridge.",
   "architecture": "NanoVNA RF/DSP → Modern UI + SD Extensions → USB Protocol → Bridge/Web PWA ou ESP32-S3 SmartLink → Smart Analysis/TinyML/IA externa opcional",
-  "next": "Inventariar o console USB em modo somente leitura e depois confirmar enumeração DFU/recovery sem gravação; em seguida fixar upstream NanoVNA-D e produzir build F303 reproduzível.",
-  "action": "Abrir /dev/cu.usbmodem4001 em modo somente leitura, registrar help/info/version disponíveis e depois validar DFU sem escrever firmware.",
+  "next": "Registrar `version`, validar uma aquisição read-only pequena pelo protocolo USB com sintaxe confirmada e depois confirmar DFU/recovery sem gravação; em seguida fixar upstream NanoVNA-D e produzir build F303 reproduzível.",
+  "action": "Executar `version` no shell e, após validar a sintaxe upstream, capturar uma fixture mínima de sweep sem alterar configuração persistente; depois validar enumeração DFU sem escrever firmware.",
   "subprojects": [
     "Hardware fingerprint F0",
     "USB runtime CDC ✓",
+    "USB shell + command inventory ✓",
+    "USB measurement protocol fixture",
     "DFU/recovery pendente",
     "NanoVNA-D F303 baseline",
     "Modern UI 480x320",
@@ -27,7 +29,7 @@
   ],
   "activity": {
     "date": "2026-09-12",
-    "type": "hardware-validation",
-    "text": "Runtime USB enumeration confirmed on macOS: NanoVNA-H4 VID 0x0483 PID 0x5740 at Full Speed with CDC serial node /dev/cu.usbmodem4001. Cable compatibility was the blocking factor in previous tests."
+    "type": "protocol-validation",
+    "text": "Interactive NanoVNA Shell validated over USB CDC. `help` and `info` confirmed firmware 1.2.44 [p:401, IF:12k, ADC:384k, Lcd:480x320], STM32F303xC/Cortex-M4F and a command surface suitable for Bridge work, including scan, scan_bin, data, frequencies, capture and SD access."
   }
 }
