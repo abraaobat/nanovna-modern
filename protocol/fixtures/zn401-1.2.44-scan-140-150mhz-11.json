@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "fixtureId": "zn401-1.2.44-scan-140-150mhz-11",
+  "device": {
+    "board": "NanoVNA-H 4",
+    "commercialModel": "ZeenKo ZN401",
+    "hardwareVersion": "4.7_ZK",
+    "firmwareVersion": "1.2.44",
+    "platform": "STM32F303xC Analog & DSP"
+  },
+  "transport": {
+    "type": "usb-cdc",
+    "prompt": "ch>",
+    "vid": "0x0483",
+    "pid": "0x5740"
+  },
+  "request": {
+    "command": "scan 140000000 150000000 11 7",
+    "startHz": 140000000,
+    "stopHz": 150000000,
+    "points": 11,
+    "outmask": 7
+  },
+  "columns": ["frequencyHz", "s11Re", "s11Im", "s21Re", "s21Im"],
+  "points": [
+    [140000000, 0.995901824, -0.003665643, 0.000011592, 0.000010958],
+    [141000000, 0.995256256, -0.003628920, -0.000000078, -0.000012656],
+    [142000000, 0.994775104, -0.003604681, 0.000002322, -0.000013292],
+    [143000000, 0.991078528, -0.009950332, -0.000005835, 0.000011198],
+    [144000000, 0.994776256, -0.003822996, -0.000001984, 0.000014572],
+    [145000000, 0.995125632, -0.003857077, -0.000017775, -0.000007005],
+    [146000000, 0.995369408, -0.004074757, -0.000029180, -0.000009297],
+    [147000000, 0.994864704, -0.004157055, -0.000008280, -0.000010366],
+    [148000000, 0.994803328, -0.004150857, 0.000011504, 0.000004623],
+    [149000000, 0.994282176, -0.004347308, -0.000009604, 0.000015873],
+    [150000000, 0.994291328, -0.004375090, -0.000016000, 0.000001470]
+  ],
+  "notes": [
+    "Captured from the reference ZN401 over the live NanoVNA Shell.",
+    "This fixture validates framing and numeric parsing only; it is not a metrology reference because DUT, calibration state and port terminations were not recorded."
+  ]
+}
