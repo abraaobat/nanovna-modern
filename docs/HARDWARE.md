@@ -17,27 +17,48 @@
 | Architecture | ARMv7E-M Cortex-M4F |
 | TXCO shown | 26.000000 MHz |
 
-## Current USB diagnostic
+## USB runtime diagnostic
 
-macOS with device powered over USB-C has so far shown no child USB device under `ioreg -p IOUSB -w0` and no new `/dev/cu.*` node. Changing Mac USB-C port did not change the result.
+Runtime USB enumeration on macOS is now **confirmed** with a known-good/compatible cable.
 
-Remaining controlled tests:
+Observed device identity:
 
-1. known-good USB-A → USB-C data cable through adapter/hub;
-2. reverse USB-C connector orientation if applicable;
-3. known-good USB data cable validated with another device;
-4. DFU enumeration without flashing;
-5. physical board inspection only if necessary.
+| Field | Observed value |
+|---|---|
+| Product | `NanoVNA-H4` / `NanoVNA_H4` |
+| Manufacturer | `nanovna.com` |
+| USB serial | `400` |
+| VID | `0x0483` (1155) |
+| PID | `0x5740` (22336) |
+| USB speed | 12 Mbit/s (Full Speed) |
+| Device class | 2 (CDC/communications) |
+| macOS serial node | `/dev/cu.usbmodem4001` |
+
+Evidence from `ioreg -p IOUSB -l -w 0` shows the device as `NanoVNA-H4@02100000`, and `ls /dev/cu.*` exposes `/dev/cu.usbmodem4001`.
+
+Earlier direct USB-C tests with other cables powered the unit but produced no USB child device and no serial node. Successful enumeration with a different cable strongly indicates cable/path compatibility was a material factor; this does not by itself prove the previous cables were defective.
 
 ## F0 evidence
 
+Runtime capture commands:
+
 ```bash
 system_profiler SPUSBDataType
-ioreg -p IOUSB -w0
+ioreg -p IOUSB -l -w 0
 ls /dev/cu.*
 ```
 
-If serial appears, collect read-only console output first (`help`, `info`, `version` when available).
+Next read-only console inventory:
+
+```bash
+screen /dev/cu.usbmodem4001 115200
+```
+
+Then query only non-destructive commands such as `help`, `info` and `version` when supported.
+
+### DFU
+
+DFU enumeration remains pending. F0 DFU work is enumeration/recovery validation only; do not write firmware.
 
 Expected STM32 DFU identity from upstream docs is typically `0483:df11`, but record the actual unit before approving flash.
 
@@ -47,7 +68,7 @@ Expected STM32 DFU identity from upstream docs is typically `0483:df11`, but rec
 - mixer;
 - LCD controller;
 - touchscreen controller;
-- USB-C/power implementation;
+- board-level USB-C/power implementation;
 - flash/RAM headroom of target build.
 
 ## Safety rule
